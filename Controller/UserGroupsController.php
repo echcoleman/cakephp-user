@@ -29,6 +29,16 @@ class UserGroupsController extends UserAppController {
 	public $uses = array('User.Group');
 
 /**
+ * Called before the controller action
+ */
+	public function beforeFilter() {
+		parent::beforeFilter();
+		
+		// set controller default title
+		$this->set('title_for_layout', __('Groups'));
+	}
+
+/**
  * admin_index method
  *
  * @return void

@@ -85,7 +85,10 @@ class UserUsersController extends UserAppController {
 		$this->set('model', $this->modelClass);
 		
 		// always allow following actions
-		$this->Auth->allow('login', 'logout', 'register', 'forgotten_password', 'forgotten_confirm');
+		$this->Auth->allow(array('login', 'logout', 'register', 'forgotten_password', 'forgotten_confirm'));
+		
+		// set default controller title
+		$this->set('title_for_layout', __('Users'));
 	}
 
 /**
@@ -135,22 +138,22 @@ class UserUsersController extends UserAppController {
  */
 	public function forgotten_password() {
 		$this->set('title_for_layout', __('Forgotten Password'));
-		
 		// process forgotten password
 		if ($this->request->is('post')) {
-			if (isset($this->request->data['User']['username'])) {
+			
+			if (isset($this->request->data[$this->modelClass]['username'])) {
 				
 				// @todo: Found bug in CakePHP when try to use below statement,
 				// had to supply username twice (for username and email values check)
-				$username = $this->request->data['User']['username'];
+				$username = $this->request->data[$this->modelClass]['username'];
 				$user = $this->{$this->modelClass}->findByUsernameOrEmail($username, $username);
 				
 				// ensure user is valid and active
 				if (!empty($user)) {
-					if ($user['User']['active'] == 1) {
+					if ($user[$this->modelClass]['active'] == 1) {
 						if ($this->{$this->modelClass}->sendForgottenPassword($user)) {
-							$this->Session->setFlash(__('Please check your mail to reset your password'), null, null, 'error');
-							unset($this->request->data['User']);
+							$this->Session->setFlash(__('Please check your mail to reset your password'));
+							unset($this->request->data[$this->modelClass]);
 						}
 						else {
 							$this->Session->setFlash(__('Unable process your request. Please try again.'), null, null, 'error');
@@ -193,6 +196,7 @@ class UserUsersController extends UserAppController {
 			$this->Session->setFlash(__('Invalid forgotten password confrimation received. Please try again.'), null, null, 'error');
 		}
 		$this->redirect(array('action' => 'login'));
+		exit;
 	}
 
 /**

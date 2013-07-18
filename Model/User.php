@@ -8,6 +8,12 @@ App::uses('Security', 'Utility');
  * @property Group $Group
  */
 class User extends UsersAppModel {
+
+/**
+ * Table to use with model
+ */
+	public $useTable = 'users';
+
 /**
  * Display field
  *
@@ -205,30 +211,31 @@ class User extends UsersAppModel {
  */
 	public function sendForgottenPassword($user) {
 		App::uses('CakeEmail', 'Network/Email');
+		$alias = $this->alias;
 		try {
 			// get encrypted url
-			$key = Security::hash($user[$this->alias]['salt'] . $user[$this->alias]['id']);
-			$url = Router::url(array(
+			$key = Security::hash($user[$alias]['salt'] . $user[$alias]['id']);
+			$link = Router::url(array(
 				'controller' => 'users',
 				'action' => 'forgotten_confirm',
 				'?' => array(
-					'uid' => $user[$this->alias]['id'],
+					'uid' => $user[$alias]['id'],
 					'key' => $key
 				)
 			), true);
 			
 			$email = new CakeEmail('default');
-			$email->to($user[$this->alias]['email'])
+			$email->to($user[$alias]['email'])
 				->subject(__('Forgotten Password'))
-				->template('forgotten_password')
+				->template('User.forgotten_password')
 				->emailFormat('text')
-				->viewVars(compact('user', 'url'))
+				->viewVars(compact('user', 'alias', 'link'))
 				->send();
 			
 			return true;
 		}
 		catch (SocketException $e) {
-			$this->log("Unable to send forgotten password to user id ({$user[$this->alias]['id']}): {$e->getMessage()})", LOG_ERROR);
+			$this->log("Unable to send forgotten password to user id ({$user[$this->alias]['id']}): {$e->getMessage()})");
 		}
 		return false;
 	}
@@ -241,27 +248,28 @@ class User extends UsersAppModel {
  * @return boolean Return true on success, otherwise return false
  */
 	public function sendForgottenNewPassword($user, $key) {
-		
+		$alias = $this->alias;
 		// verify key
-		if ($key == Security::hash($user[$this->alias]['salt'] . $user[$this->alias]['id'])) {
+		$check_key = Security::hash($user[$alias]['salt'] . $user[$alias]['id']);
+		if ($key == $check_key) {
 			$password = $this->_generatePassword();
-			$user[$this->alias]['password'] = $password;
+			$user[$alias]['password'] = $password;
 			if ($this->save($user, false, array('password', 'salt'))) {
 				
 				App::uses('CakeEmail', 'Network/Email');
 				try {
 					$email = new CakeEmail('default');
-					$email->to($user[$this->alias]['email'])
+					$email->to($user[$alias]['email'])
 						->subject(__('Password Updated'))
-						->template('password_updated')
+						->template('User.password_updated')
 						->emailFormat('text')
-						->viewVars(compact('user', 'password'))
+						->viewVars(compact('user', 'alias', 'password'))
 						->send();
 
 					return true;
 				}
 				catch (SocketException $e) {
-					$this->log("Unable to send updated password to user id ({$user[$this->alias]['id']}): {$e->getMessage()})", LOG_ERROR);
+					$this->log("Unable to send updated password to user id ({$user[$this->alias]['id']}): {$e->getMessage()})");
 				}
 			}
 		}

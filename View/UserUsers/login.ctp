@@ -6,6 +6,11 @@
 		'username',
 		'password'
 	));
-	echo $this->Form->end('Login');
+	?>
+	<p>
+		<?php echo $this->Html->link(__('I forgot my password'), array('action' => 'forgotten_password')); ?>
+	</p>
+	<?php
+	echo $this->Form->end(__('Login'));
 	?>
 </div>

@@ -15,6 +15,7 @@ class UserAppController extends AppController {
 		'Html',
 		'Form',
 		'Session',
+		'Auth' => array('className' => 'User.UserAuth'),
 	);
 
 /**
@@ -25,7 +26,6 @@ class UserAppController extends AppController {
 	public $components = array(
 		'Session',
 		'Paginator',
-		//'User.UserAuth',
 	);
 
 /**
