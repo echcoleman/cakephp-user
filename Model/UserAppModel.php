@@ -7,7 +7,7 @@ App::uses('Model', 'Model');
  * @package User
  * @subpackage User.UserAppModel
  */
-class UsersAppModel extends AppModel {
+class UserAppModel extends AppModel {
 
 /**
  * Plugin name

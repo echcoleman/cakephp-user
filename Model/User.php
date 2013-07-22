@@ -1,5 +1,5 @@
 <?php
-App::uses('UsersAppModel', 'User.Model');
+App::uses('UserAppModel', 'User.Model');
 App::uses('Security', 'Utility');
 
 /**
@@ -7,7 +7,7 @@ App::uses('Security', 'Utility');
  *
  * @property Group $Group
  */
-class User extends UsersAppModel {
+class User extends UserAppModel {
 
 /**
  * Table to use with model

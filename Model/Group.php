@@ -1,12 +1,12 @@
 <?php
-App::uses('UsersAppModel', 'User.Model');
+App::uses('UserAppModel', 'User.Model');
 
 /**
  * Group Model
  *
  * @property User $User
  */
-class Group extends UsersAppModel {
+class Group extends UserAppModel {
 
 /**
  * Display field

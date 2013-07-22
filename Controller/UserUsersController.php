@@ -35,6 +35,13 @@ class UserUsersController extends UserAppController {
 	public $uses = array('User.User');
 
 /**
+ * Profile fields that are saved
+ * 
+ * @var array
+ */
+	protected $profileFields = array('username', 'email', 'password');
+
+/**
  * Constructor.
  *
  * @param CakeRequest $request Request object for this controller.
@@ -73,6 +80,15 @@ class UserUsersController extends UserAppController {
  */
 	protected function _setupComponents() {
 		// does nothing for now
+	}
+
+/**
+ * Setup profile fields that are allowed to be edited
+ * 
+ * @param array $allowed Array of allowed profile fields
+ */
+	public function setProfileEditAllowed($allowed = array()) {
+		$this->profileFields = $allowed;
 	}
 
 /**
@@ -200,7 +216,7 @@ class UserUsersController extends UserAppController {
 	}
 
 /**
- * view method
+ * view profile method
  *
  * @return void
  */
@@ -216,7 +232,7 @@ class UserUsersController extends UserAppController {
 	}
 
 /**
- * add/edit method
+ * add/edit profile method
  *
  * @return void
  */
@@ -231,9 +247,7 @@ class UserUsersController extends UserAppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			// remove/set any data users are not allowed to edit
 			$this->request->data['id'] = $id;
-			unset($this->request->data['group_id']);
-			unset($this->request->data['active']);
-			if ($this->{$this->modelClass}->save($this->request->data)) {
+			if ($this->{$this->modelClass}->save($this->request->data, true, $this->profileFields)) {
 				$this->Session->setFlash(__('Your profile has been updated'));
 				$this->redirect(array('action' => 'view_profile'));
 			} else {
@@ -291,6 +305,7 @@ class UserUsersController extends UserAppController {
 			}
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			$this->User->save();
 			if ($this->{$this->modelClass}->save($this->request->data)) {
 				$this->Session->setFlash(__('The user has been saved'));
 				$this->redirect(array('action' => 'index'));

@@ -7,28 +7,6 @@ App::uses('AppController', 'Controller');
 class UserAppController extends AppController {
 
 /**
- * Helpers
- *
- * @var array
- */
-	public $helpers = array(
-		'Html',
-		'Form',
-		'Session',
-		'Auth' => array('className' => 'User.UserAuth'),
-	);
-
-/**
- * Components
- *
- * @var array
- */
-	public $components = array(
-		'Session',
-		'Paginator',
-	);
-
-/**
  * Constructor.
  *
  * @param CakeRequest $request Request object for this controller.
