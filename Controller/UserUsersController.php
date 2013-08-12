@@ -87,7 +87,7 @@ class UserUsersController extends UserAppController {
  * 
  * @param array $allowed Array of allowed profile fields
  */
-	public function setProfileEditAllowed($allowed = array()) {
+	protected function _setProfileEditAllowed($allowed = array()) {
 		$this->profileFields = $allowed;
 	}
 
