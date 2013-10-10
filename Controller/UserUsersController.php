@@ -16,7 +16,7 @@ App::uses('UserAppController', 'User.Controller');
  * @property RememberMeComponent $RememberMe
  * @property User $User
  */
-class UserUsersController extends UserAppController {
+abstract class UserUsersController extends UserAppController {
 
 /**
  * Controller name
@@ -288,6 +288,9 @@ class UserUsersController extends UserAppController {
  * @return void
  */
 	public function admin_add() {
+		// set original action name
+		$this->request->params['origAction'] = 'add';
+		
 		$this->setAction('admin_edit');
 	}
 
@@ -298,6 +301,11 @@ class UserUsersController extends UserAppController {
  * @return void
  */
 	public function admin_edit($id = null) {
+		// set original action name if not set
+		if (!isset($this->request->params['origAction'])) {
+			$this->request->params['origAction'] = 'edit';
+		}
+		
 		if ($id) {
 			$this->{$this->modelClass}->id = $id;
 			if (!$this->{$this->modelClass}->exists()) {

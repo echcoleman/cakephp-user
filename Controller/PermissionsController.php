@@ -4,7 +4,7 @@ App::uses('UserAppController', 'User.Controller');
 /**
  * Permissions Controller
  */
-class PermissionsController extends UserAppController {
+abstract class PermissionsController extends UserAppController {
 	
 /**
  * Models

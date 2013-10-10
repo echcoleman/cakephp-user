@@ -29,16 +29,6 @@ class UserAppController extends AppController {
 				$this->request->params['origAction'] = $this->request['action'];
 			}
 		}
-		
-		// should not be URL accessible since it should
-		// be extended in the application
-		// @todo: see if there's a better method to implement this
-		if (get_class($this) == __CLASS__) {
-			throw new MissingControllerException(array(
-				'class' => Inflector::camelize($this->params['controller']) . 'Controller',
-				'plugin' => empty($this->params['plugin']) ? null : Inflector::camelize($this->params['plugin'])
-			));
-		}
 	}
 
 /**
