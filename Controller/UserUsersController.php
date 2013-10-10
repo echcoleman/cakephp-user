@@ -124,9 +124,11 @@ abstract class UserUsersController extends UserAppController {
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
 				$this->redirect($this->Auth->redirect());
-			} else {
+			}
+			else {
 				// check if user could not login because they aren't active
-				$this->Auth->authenticate['UserForm']['scope'] = false;
+				$this->Auth->authenticate['User.UserForm']['scope'] = false;
+				$this->Auth->constructAuthenticate();
 				if ($this->Auth->identify($this->request, $this->response)) {
 					$this->Session->setFlash('Your account is not active. Please confirm your account via email or contact our administrators.', null, null, 'error');
 				}
@@ -232,7 +234,7 @@ abstract class UserUsersController extends UserAppController {
 	}
 
 /**
- * add/edit profile method
+ * edit profile method
  *
  * @return void
  */

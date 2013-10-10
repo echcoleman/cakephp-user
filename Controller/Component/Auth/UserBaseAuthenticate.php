@@ -72,7 +72,7 @@ abstract class UserBaseAuthenticate {
 		}
 		
 		// get user scope
-		if (!empty($this->settings['scope'])) {
+		if (!empty($this->settings['scope']) && $this->settings['scope'] !== false) {
 			$conditions = array_merge($conditions, $this->settings['scope']);
 		}
 		
