@@ -120,6 +120,17 @@ abstract class UserBaseAuthenticate {
 	abstract public function authenticate(CakeRequest $request, CakeResponse $response);
 
 /**
+ * Handle unauthenticated access attempt.
+ *
+ * @param CakeRequest $request A request object.
+ * @param CakeResponse $response A response object.
+ * @return mixed Either true to indicate the unauthenticated request has been
+ *  dealt with and no more action is required by AuthComponent or void (default).
+ */
+	public function unauthenticated(CakeRequest $request, CakeResponse $response) {
+	}
+
+/**
  * Allows you to hook into AuthComponent::logout(),
  * and implement specialized logout behavior.
  *
