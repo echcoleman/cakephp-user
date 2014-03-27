@@ -118,4 +118,18 @@ class UserBasicAuthenticate extends UserBaseAuthenticate {
 		return sprintf('WWW-Authenticate: Basic realm="%s"', $this->settings['realm']);
 	}
 
+/**
+ * Handles an unauthenticated access attempt by sending appropriate login headers
+ *
+ * @param CakeRequest $request A request object.
+ * @param CakeResponse $response A response object.
+ * @return void
+ * @throws UnauthorizedException
+ */
+	public function unauthenticated(CakeRequest $request, CakeResponse $response) {
+		$Exception = new UnauthorizedException();
+		$Exception->responseHeader(array($this->loginHeaders()));
+		throw $Exception;
+	}
+
 }

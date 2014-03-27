@@ -12,7 +12,7 @@ App::uses('UserAppController', 'User.Controller');
  * @property PaginatorComponent $Paginator
  * @property Group $Group
  */
-class UserGroupsController extends UserAppController {
+abstract class UserGroupsController extends UserAppController {
 
 /**
  * Controller name
@@ -67,6 +67,9 @@ class UserGroupsController extends UserAppController {
  * @return void
  */
 	public function admin_add() {
+		// set original action name
+		$this->request->params['origAction'] = 'add';
+		
 		$this->setAction('admin_edit');
 	}
 
@@ -77,6 +80,11 @@ class UserGroupsController extends UserAppController {
  * @return void
  */
 	public function admin_edit($id = null) {
+		// set original action name if not set
+		if (!isset($this->request->params['origAction'])) {
+			$this->request->params['origAction'] = 'edit';
+		}
+		
 		if ($id) {
 			$this->Group->id = $id;
 			if (!$this->Group->exists()) {

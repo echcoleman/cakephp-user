@@ -16,7 +16,7 @@ App::uses('UserAppController', 'User.Controller');
  * @property RememberMeComponent $RememberMe
  * @property User $User
  */
-class UserUsersController extends UserAppController {
+abstract class UserUsersController extends UserAppController {
 
 /**
  * Controller name
@@ -129,9 +129,11 @@ class UserUsersController extends UserAppController {
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
 				$this->redirect($this->Auth->redirect());
-			} else {
+			}
+			else {
 				// check if user could not login because they aren't active
-				$this->Auth->authenticate['UserForm']['scope'] = false;
+				$this->Auth->authenticate['User.UserForm']['scope'] = false;
+				$this->Auth->constructAuthenticate();
 				if ($this->Auth->identify($this->request, $this->response)) {
 					$this->Session->setFlash('Your account is not active. Please confirm your account via email or contact our administrators.', null, null, 'error');
 				}
@@ -237,7 +239,7 @@ class UserUsersController extends UserAppController {
 	}
 
 /**
- * add/edit profile method
+ * edit profile method
  *
  * @return void
  */
@@ -297,6 +299,9 @@ class UserUsersController extends UserAppController {
  * @return void
  */
 	public function admin_add() {
+		// set original action name
+		$this->request->params['origAction'] = 'add';
+		
 		$this->setAction('admin_edit');
 	}
 
@@ -307,6 +312,11 @@ class UserUsersController extends UserAppController {
  * @return void
  */
 	public function admin_edit($id = null) {
+		// set original action name if not set
+		if (!isset($this->request->params['origAction'])) {
+			$this->request->params['origAction'] = 'edit';
+		}
+		
 		if ($id) {
 			$this->{$this->modelClass}->id = $id;
 			if (!$this->{$this->modelClass}->exists()) {

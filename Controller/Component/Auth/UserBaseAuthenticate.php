@@ -72,7 +72,7 @@ abstract class UserBaseAuthenticate {
 		}
 		
 		// get user scope
-		if (!empty($this->settings['scope'])) {
+		if (!empty($this->settings['scope']) && $this->settings['scope'] !== false) {
 			$conditions = array_merge($conditions, $this->settings['scope']);
 		}
 		
@@ -118,6 +118,17 @@ abstract class UserBaseAuthenticate {
  * @return mixed Either false on failure, or an array of user data on success.
  */
 	abstract public function authenticate(CakeRequest $request, CakeResponse $response);
+
+/**
+ * Handle unauthenticated access attempt.
+ *
+ * @param CakeRequest $request A request object.
+ * @param CakeResponse $response A response object.
+ * @return mixed Either true to indicate the unauthenticated request has been
+ *  dealt with and no more action is required by AuthComponent or void (default).
+ */
+	public function unauthenticated(CakeRequest $request, CakeResponse $response) {
+	}
 
 /**
  * Allows you to hook into AuthComponent::logout(),
