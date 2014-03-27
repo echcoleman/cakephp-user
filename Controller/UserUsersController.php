@@ -253,6 +253,10 @@ class UserUsersController extends UserAppController {
 			// remove/set any data users are not allowed to edit
 			$this->request->data['id'] = $id;
 			if ($this->{$this->modelClass}->save($this->request->data, true, $this->profileFields)) {
+				// renew user session data
+				$user = $this->{$this->modelClass}->recursive = -1;
+				$this->Auth->login($user[$this->modelClass]);
+				
 				$this->Session->setFlash(__('Your profile has been updated'));
 				$this->redirect(array('action' => 'view_profile'));
 			} else {
