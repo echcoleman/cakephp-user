@@ -90,10 +90,10 @@ abstract class UserUsersController extends UserAppController {
 	protected function _setProfileEditAllowed($allowed = array()) {
 		$this->profileFields = $allowed;
                 
-                // if password can be updated, salt needs to update as well
-                if (in_array('password', $this->profileFields)) {
-                    $this->profileFields[] = 'salt';
-                }
+		// if password can be updated, salt needs to update as well
+		if (in_array('password', $this->profileFields)) {
+			$this->profileFields[] = 'salt';
+		}
 	}
 
 /**
